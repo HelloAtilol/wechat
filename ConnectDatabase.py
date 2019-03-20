@@ -41,12 +41,12 @@ class MySQLCommand(object):
             print(e)
 
     def insertData(self, data_dict, primary_key='msgId'):
-        '''
+        """
         将数据插入数据库，首先检查数据是否已经存在，如果存在则不插入
         :param data_dict: 要插入的数据字典
         :param primary_key: 主键
         :return:
-        '''
+        """
 
         # 检测数据是否存在
         sqlExit = "SELECT %s FROM %s WHERE %s = '%s' " % (primary_key, self.table, primary_key, data_dict[primary_key])
