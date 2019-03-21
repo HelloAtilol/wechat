@@ -3,6 +3,8 @@
 
 """
 
+import re
+
 
 def main():
 
@@ -19,5 +21,14 @@ def main():
     fi.close()
 
 
+def re_many():
+    only_con = "病友之家大白????病友?1234，孩子四化后吐的很历害，还不想吃。怎么办"
+    split_at = re.findall(r'@.*?[，\? ]', only_con, re.M)
+    print(split_at)
+    # print(split_at[1])
+    # print(split_at[2])
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    re_many()

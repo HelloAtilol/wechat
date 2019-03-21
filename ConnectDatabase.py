@@ -4,7 +4,7 @@
 编写创建数据库的类，并构建connectMysql方法
 author:王诚坤
 date：2018/10/16
-update: 2018/10/29
+update: 2019/03/20
 """
 
 import pymysql
@@ -35,7 +35,7 @@ class MySQLCommand(object):
             self.conn = pymysql.connect(host=self.host, port=self.port, user=self.user,
                                         passwd=self.password, db=self.db, charset='utf8')
             self.cursor = self.conn.cursor()
-            print("数据库已连接！")
+            print(self.table, "表已连接！")
         except pymysql.Error as e:
             print('连接数据库失败！')
             print(e)
@@ -47,7 +47,6 @@ class MySQLCommand(object):
         :param primary_key: 主键
         :return:
         """
-
         # 检测数据是否存在
         sqlExit = "SELECT %s FROM %s WHERE %s = '%s' " % (primary_key, self.table, primary_key, data_dict[primary_key])
         # 执行查找语句
@@ -84,31 +83,35 @@ class MySQLCommand(object):
         except pymysql.Error as e:
             print("数据库错误，原因 %d: %s" % (e.args[0], e.args[1]))
 
-    def select_word(self, word):
-        sql = "SELECT * FROM %s WHERE word = '%s'" % (self.table, word)
-        res = self.cursor.execute(sql)
-        if res:
-            result = self.cursor.fetchone()
-            return result
-        else:
-            raise Exception("数据库中没有找到该'%s'！" % word)
-
-    def select_order(self, title_list, situation='', order='ASC'):
+    def select_order(self, title_list, situation='', order_title="", order_type='ASC'):
         """
         查找所有数据中的某几列
-        :param situation: 条件语句，即WHERE语句
-        :param title_list: 要查找的列的名称
-        :param order: 排序方式，ASC为升序，DESC为降序
-        :return:
+        :param order_type: 排序方式，ASC为升序，DESC为降序；
+        :param order_title: 排序的列的名称(title)；
+        :param situation: 条件语句，即WHERE语句；
+        :param title_list: 要查找的列的名称；
+        :return:查询的结果;
         """
         title = ','.join(title_list)
-        sql = "SELECT %s FROM %s %s ORDER BY createTime %s" % (title, self.table, situation, order)
-        res = self.cursor.execute(sql)
+        if order_title is not "":
+            order_title = "ORDER BY %s %s" % (order_title, order_type)
+        sql = "SELECT %s FROM %s %s %s ;" % (title, self.table, situation, order_title)
+        self.cursor.execute(sql)
+        return self.cursor
+
+    def select_distinct(self, title="talker"):
+        """
+        获取所有的群编号(talker的数量)
+        :param title:默认为talker，可以替换使用其他方式;
+        :return:查询结果的元组;
+        """
+        sqlChatRoom = "SELECT DISTINCT %s FROM %s;" % (title, self.table)
+        res = self.cursor.execute(sqlChatRoom)
         if res:
             result = self.cursor.fetchall()
             return result
         else:
-            raise  Exception("数据库未找到对应数据！")
+            raise Exception("%s 没有内容！" % title)
 
     def closeMysql(self):
         """
@@ -117,10 +120,15 @@ class MySQLCommand(object):
         """
         self.cursor.close()
         self.conn.close()
-        print('数据库连接已关闭！')
+        print(self.table, '数据库连接已关闭！')
 
 
 def main():
+    """
+    导入数据的操作。
+    只需要修改表名和文件名即可。(推荐文件编码格式为utf-8.否则潜在不能正确编码的问题。)
+    :return:
+    """
     # 初始化并建立数据库连接
     conn = MySQLCommand()
     conn.connectMysql(table="wechat_contact")
@@ -132,7 +140,6 @@ def main():
             try:
                 i = i + 1
                 data_dict = next(csv_file)
-                # data_dict['content'] = str(data_dict['content']).replace("\"", '\\"')
             except UnicodeDecodeError as e:
                 print(e)
                 print(data_dict)
@@ -146,7 +153,6 @@ def main():
                 print(e)
                 print(str(i) + '行出现错误，手动处理')
                 print(data_dict)
-            # print(i, "插入成功！")
     # 关闭数据库连接
     conn.closeMysql()
 
