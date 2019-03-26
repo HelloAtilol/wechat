@@ -10,7 +10,7 @@ def main():
 
     fi = open('data/split_result.txt', 'a', encoding='utf-8')
 
-    with open('data/result.txt', 'r') as f:
+    with open('data/contents.txt', 'r') as f:
         for line in f.readlines():
             if line[0] is ' ':
                 line = line[1:]

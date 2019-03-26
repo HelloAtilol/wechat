@@ -51,7 +51,7 @@ def getChatroomContent(message_conn, contact_conn, chatroomNum):
     title_list = ["content", "createTime"]
     situation = "WHERE talker = '%s'" % chatroomNum
     cursor = message_conn.select_order(title_list, situation, order_title="createTime")
-    result_file = open("result/%s.txt" % chatroomName, 'a', encoding='utf-8')
+    result_file = open("contents/%s.txt" % chatroomName, 'a', encoding='utf-8')
     result = cursor.fetchone()
     while result is not None:
         context, createTime = result
