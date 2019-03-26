@@ -84,7 +84,7 @@ def countSender(connector):
                 user_dict[user_id] += 1
 
         # 将获得的统计结果输出到指定文件
-        with open('result/count_user_id_' + file_name + '.txt', 'w', encoding='utf-8') as f:
+        with open('contents/count_user_id_' + file_name + '.txt', 'w', encoding='utf-8') as f:
             for user_num in user_dict:
                 f.write(user_num + '\t' + str(user_dict[user_num]) + '\n')
         print('******%s文件统计完成(没有遇到BUG)!!!******' % file_name)
@@ -121,7 +121,7 @@ def count_by_time(connector):
                 time_dict[c_time] += 1
 
         # 将获得的统计结果输出到指定文件
-        with open('result/count_by_hour_' + file_name + '.txt', 'w', encoding='utf-8') as f:
+        with open('contents/count_by_hour_' + file_name + '.txt', 'w', encoding='utf-8') as f:
             for c_time in time_dict:
                 f.write(c_time + '\t' + str(time_dict[c_time]) + '\n')
         print('******%s文件统计完成(没有遇到BUG)!!!******' % file_name)
@@ -141,7 +141,7 @@ def count_by_time_all(connector):
             time_dict[c_time] = 1
         else:
             time_dict[c_time] += 1
-    with open('result/count_by_hour_all.txt', 'w', encoding='utf-8') as f:
+    with open('contents/count_by_hour_all.txt', 'w', encoding='utf-8') as f:
         for c_time in time_dict:
             f.write(c_time + '\t' + str(time_dict[c_time]) + '\n')
     print('******%s文件统计完成(没有遇到BUG)!!!******')
@@ -188,7 +188,7 @@ def count_len(connector):
                 len_dict[user_id]['times'] += 1
 
         # 将统计结果保存到文件
-        with open('result/count_len_' + file_name + '.txt', 'w', encoding='utf-8') as f:
+        with open('contents/count_len_' + file_name + '.txt', 'w', encoding='utf-8') as f:
             for user_id in len_dict:
                 f.write(user_id + '\t' + str(len_dict[user_id]['lens']) + '\t' + str(len_dict[user_id]['times']) + '\n')
         print('******%s文件统计完成(没有遇到BUG)!!!******')
@@ -233,7 +233,7 @@ def count_at(connector):
             else:
                 name_dict[user_name] += 1
         # 保存到文件
-        with open('result/count_@_username_' + file_name + '.txt', 'w', encoding='utf-8') as f:
+        with open('contents/count_@_username_' + file_name + '.txt', 'w', encoding='utf-8') as f:
             for user_name in name_dict:
                 f.write(user_name + '\t' + str(name_dict[user_name]) + '\n')
         print('******%s文件统计完成(没有遇到BUG)!!!******' % file_name)
@@ -244,7 +244,7 @@ def count_word(connector):
     file_list = os.listdir('data/')
 
     # 加载停用词
-    stop_words = get_stopwords('result/stopwords.txt')
+    stop_words = get_stopwords('contents/stopwords.txt')
     # 将内容分解的正则表达式
     re_con = re.compile(r'^(.*)(:\n)(.*)')
 
@@ -276,7 +276,7 @@ def count_word(connector):
                 print(context)
                 continue
                 # 保存到文件
-        with open('result/count_word_' + file_name + '.txt', 'w', encoding='utf-8') as f:
+        with open('contents/count_word_' + file_name + '.txt', 'w', encoding='utf-8') as f:
             for word in word_dict:
                 f.write(word + '\t' + str(word_dict[word]) + '\n')
         print('******%s文件统计完成(没有遇到BUG)!!!******' % file_name)
@@ -320,14 +320,14 @@ def count_time_of_times():
     :return:
     """
     f_list = ['6342900410', '6378298822', '6506298440', '6599081320']
-    file_list = os.listdir('result/')
+    file_list = os.listdir('contents/')
     i = 0
     for file_name in file_list:
         if 'count_len_' not in file_name:
             continue
         result = {}
         f_name = f_list[i] + '_by_times.txt'
-        with open('result/' + file_name, 'r') as f:
+        with open('contents/' + file_name, 'r') as f:
             for line in f.readlines():
                 res = line.split('\t')
                 times = res[2].replace('\n', '')
@@ -336,7 +336,7 @@ def count_time_of_times():
                 else:
                     result[times] += 1
 
-        with open('result/' + f_name, 'w') as f:
+        with open('contents/' + f_name, 'w') as f:
             for r in result:
                 f.write(r + '\t' + str(result[r]) + '\n')
         i += 1
