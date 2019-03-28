@@ -3,7 +3,7 @@
 """
 读取数据库，按照群划分不同的txt。
 """
-import ConnectDatabase as cd
+from commonTools import ConnectDatabase as cd
 import re
 import time
 import threading
