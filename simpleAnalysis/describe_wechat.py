@@ -10,7 +10,7 @@
 8. 四个群分别提到最多的词(去掉stopwords) √
 """
 
-from ConnectDatabase import MySQLCommand
+from commonTools.ConnectDatabase import MySQLCommand
 import time
 import os
 import re

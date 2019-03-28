@@ -15,7 +15,7 @@ class MySQLCommand(object):
     # 初始化类
     def __init__(self):
         # 数据库地址
-        self.host = '192.168.1.110'
+        self.host = '192.168.1.107'
         # 端口号
         self.port = 3306
         # 用户名
@@ -48,13 +48,14 @@ class MySQLCommand(object):
         :return:
         """
         # 检测数据是否存在
-        sqlExit = "SELECT %s FROM %s WHERE %s = '%s' " % (primary_key, self.table, primary_key, data_dict[primary_key])
-        # 执行查找语句
-        # print(sqlExit)
-        res = self.cursor.execute(sqlExit)
-        if res:
-            print('数据已经存入数据库', res)
-            return 0
+        if primary_key is not "":
+            sqlExit = "SELECT %s FROM %s WHERE %s = '%s' " % (primary_key, self.table, primary_key, data_dict[primary_key])
+            # 执行查找语句
+            # print(sqlExit)
+            res = self.cursor.execute(sqlExit)
+            if res:
+                print('数据已经存入数据库', res)
+                return 0
         # 数据不存在，则执行插入操作
         try:
             # 拼接属性名
@@ -112,6 +113,16 @@ class MySQLCommand(object):
             return result
         else:
             raise Exception("%s 没有内容！" % title)
+
+    def update_database(self, datadict, situation):
+        part_sql = ""
+        for key, value in datadict.items():
+            part_sql = part_sql + "%s = '%s'," % (key, value)
+        sql = "UPDATE %s SET %s %s" % (self.table, part_sql[0: -1], situation)
+        # print(sql)
+        res = self.cursor.execute(sql)
+        self.conn.commit()
+        return res
 
     def closeMysql(self):
         """
