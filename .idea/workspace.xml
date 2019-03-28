@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55acf7df-3559-4c2d-8cd6-d8b750ebc242" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/commonTools/wechatContent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simpleAnalysis/wechatAnalysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConnectDatabase.py" beforeDir="false" afterPath="$PROJECT_DIR$/commonTools/ConnectDatabase.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/contentByChatroom.py" beforeDir="false" afterPath="$PROJECT_DIR$/simpleAnalysis/contentByChatroom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/describe_wechat.py" beforeDir="false" afterPath="$PROJECT_DIR$/simpleAnalysis/describe_wechat.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/someTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/someTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/split_content.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/split_result.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,12 +17,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="528">
-                <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+                <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
               </first_editor>
               <second_editor />
             </state>
@@ -73,11 +65,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simpleAnalysis/wechatAnalysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="584">
-              <caret line="124" column="28" lean-forward="true" selection-start-line="124" selection-start-column="28" selection-end-line="124" selection-end-column="28" />
+            <state relative-caret-position="48">
+              <caret line="2" selection-start-line="2" selection-end-line="3" selection-end-column="74" />
               <folding>
                 <element signature="e#256#316#0" expanded="true" />
               </folding>
@@ -107,17 +99,17 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/contentByChatroom.py" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/wechatContent.py" />
         <option value="$PROJECT_DIR$/describe_wechat.py" />
         <option value="$PROJECT_DIR$/someTest.py" />
         <option value="$PROJECT_DIR$/firstTime.txt" />
         <option value="$PROJECT_DIR$/ConnectDatabase.py" />
         <option value="$PROJECT_DIR$/wechatAnalysis.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="64" />
     <option name="y" value="23" />
     <option name="width" value="1750" />
@@ -151,6 +143,11 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\workspace\wechat\simpleAnalysis" />
+      <recent name="E:\workspace\wechat\contents" />
+      <recent name="E:\workspace\wechat\commonTools" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\workspace\wechat" />
     </key>
@@ -257,18 +254,18 @@
       <workItem from="1553224563384" duration="1200000" />
       <workItem from="1553329223279" duration="3964000" />
       <workItem from="1553571833229" duration="14393000" />
-      <workItem from="1553673108064" duration="12584000" />
+      <workItem from="1553673108064" duration="12738000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62845000" />
+    <option name="totallyTimeSpent" value="62999000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15831557" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1119403" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -333,16 +330,6 @@
         <state relative-caret-position="-234265" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="528">
-            <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/someTest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="537">
@@ -357,16 +344,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="792">
           <caret line="45" column="38" lean-forward="true" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simpleAnalysis/describe_wechat.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1400">
-          <caret line="61" column="48" selection-start-line="61" selection-start-column="48" selection-end-line="61" selection-end-column="48" />
-          <folding>
-            <element signature="e#267#307#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -402,11 +379,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simpleAnalysis/wechatAnalysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="124" column="28" lean-forward="true" selection-start-line="124" selection-start-column="28" selection-end-line="124" selection-end-column="28" />
+        <state relative-caret-position="48">
+          <caret line="2" selection-start-line="2" selection-end-line="3" selection-end-column="74" />
           <folding>
             <element signature="e#256#316#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simpleAnalysis/describe_wechat.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1400">
+          <caret line="61" column="48" selection-start-line="61" selection-start-column="48" selection-end-line="61" selection-end-column="48" />
+          <folding>
+            <element signature="e#267#307#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="528">
+            <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
