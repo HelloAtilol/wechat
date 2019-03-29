@@ -32,7 +32,7 @@ class WechatContent:
             only_con = self.origin_context.replace(split_res[1] + split_res[2], '')
             result["user_id"] = split_res[1]
         except TypeError:
-            result['user_id'] = ''
+            result['user_id'] = "_"
             only_con = self.origin_context
         result["only_con"] = only_con
         return result
