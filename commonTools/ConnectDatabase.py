@@ -72,7 +72,7 @@ class MySQLCommand(object):
                 self.conn.commit()
 
                 if result:
-                    print('插入成功', insert_id)
+                    # print('插入成功', insert_id)
                     return insert_id + 1
             except pymysql.Error as e:
                 # 如果出现异常，执行回滚操作
