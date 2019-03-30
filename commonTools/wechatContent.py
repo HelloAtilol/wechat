@@ -48,3 +48,22 @@ class WechatContent:
         else:
             split_at = re.findall(self.re_at, self.origin_context, re.M)
             return [sa[1:-1] for sa in split_at]
+
+    def splitWithAt(self):
+        """
+        将内容解析为{”user_id“:user_id, "only_con":only_con_without_at, "atList":[atList]}
+        :return:
+        """
+        result = self.splitContent()
+        # 如果包含“<”， 说明存在网页，不需要解析@；
+        if "<" in self.origin_context:
+            result["atList"] = []
+        else:
+            split_at = re.findall(self.re_at, self.origin_context, re.M)
+            # 将@的内容去除，简化分词
+            content = result["only_con"]
+            for sa in split_at:
+                content = content.replace(sa, "")
+            result["only_con"] = content
+            result["atList"] = self.splitAt()
+        return result

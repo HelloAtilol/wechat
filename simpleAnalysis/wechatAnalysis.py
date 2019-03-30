@@ -11,6 +11,20 @@ TODO: 存在一个BUG，就是在多线程开启，建立多个数据库连接�
 from commonTools import wechatContent, ConnectDatabase as cd
 import threading
 import time
+import os
+import jieba
+
+
+def get_stopwords():
+    """
+    加载停用词
+    :return: 停用词list
+    """
+    # 获取当前路径
+    current_path = os.path.abspath(os.path.dirname(os.getcwd()))
+    filepath = current_path + "/data/stopwords.txt"
+    stopwords = [line.strip() for line in open(filepath, 'r', encoding='utf-8').readlines()]
+    return stopwords
 
 
 def split_content(sender_conn, talker_content):
@@ -73,9 +87,38 @@ def split_content(sender_conn, talker_content):
     print("***第%s条已处理***" % msgId)
 
 
-def count_sender_by_chatroom(coreNum):
+def cut_word(word_conn, message_info):
+
+    # 加载停用词辞典(这里为了不影响语意，暂时不删除停用词)
+    # stopwords = get_stopwords()
+    msgId = message_info[0]
+    msgType = message_info[1]
+    content = message_info[3]
+    if msgType is not "1":
+        return None
+
+    wechat = wechatContent.WechatContent(content)
+    result = wechat.splitWithAt()
+    # 去掉user_id和@的纯内容
+    context = result["only_con"]
+
+    # 开始分词
+    seg = jieba.cut(context)
+    new_data = {"msgId": str(msgId), "context": context, "jieba_word": "/".join(seg), "atList": "/".join(result["atList"])}
+    # 将数据插入数据库
+    word_conn.insertData(new_data)
+    # 保存数据
+    # conn.save(data)
+    # print(word_list, atList)
+    # time.sleep(1000)
+    print("***第%s条已处理***" % msgId)
+
+
+def multi_run(coreNum, targetTable, targetFunction):
     """
-    按照群和用户，拆分每个用户的发言规律
+    多线程启动函数
+    :param targetFunction: 多线程调用的函数
+    :param targetTable: 要存储的表名
     :param coreNum: 线程数
     :return:
     """
@@ -88,7 +131,7 @@ def count_sender_by_chatroom(coreNum):
     conn_dict = {}
     for j in range(coreNum):
         message_conn = cd.MySQLCommand()
-        message_conn.connectMysql(table="wechat_sender")
+        message_conn.connectMysql(table=targetTable)
         conn_dict["conn_%s" % str(j)] = message_conn
 
     # 设计一个钩子
@@ -98,11 +141,11 @@ def count_sender_by_chatroom(coreNum):
         for sender_conn in conn_dict.values():
             message = message_cursor.fetchone()
             # 如果已经遍历结束，直接结束
-            if message is not None:
+            if message is None:
                 # message_conn.closeMysql()
                 TAG = False
                 break
-            th = threading.Thread(target=split_content, args=(sender_conn, message, ))
+            th = threading.Thread(target=targetFunction, args=(sender_conn, message, ))
             # print("第", i, "个线程开启")
             th.start()
             th.join()
@@ -111,13 +154,56 @@ def count_sender_by_chatroom(coreNum):
         conn_j.closeMysql()
 
 
+def count_sender_by_chatroom(coreNum):
+    """
+    统计发言规律
+    :param coreNum:
+    :return:
+    """
+    multi_run(coreNum, "wechat_sender", split_content)
+
+
+def cut_word_jieba(coreNum):
+    """
+    进行jieba分词，并获得@list
+    :param coreNum:
+    :return:
+    """
+    multi_run(coreNum, "wechat_word", cut_word)
+
+
 def main():
     startTime = time.time()
-    coreNum = input("线程数量：")
-    count_sender_by_chatroom(int(coreNum))
+    coreNum = int(input("线程数量："))
+    # count_sender_by_chatroom(int(coreNum))
+    cut_word_jieba(coreNum)
     endTime = time.time()
     print('运行时间：%.3f' % (endTime - startTime))
 
 
+def clear_wechat_message():
+    """
+    # 清除数据库中发言数量少于20的聊天记录。
+    :return:
+    """
+    message_conn = cd.MySQLCommand()
+    message_conn.connectMysql(table="wechat_message")
+    for chatroom in message_conn.select_distinct():
+        chatroom = chatroom[0]
+        res = message_conn.cursor.execute("select talker from wechat_message where talker = '%s'" % chatroom)
+        print("*****", res)
+        if res < 20:
+            message_conn.cursor.execute("delete from wechat_message where talker = '%s'" % chatroom)
+            message_conn.cursor.execute("delete from wechat_sender where chatroom = '%s'" % chatroom)
+            message_conn.conn.commit()
+            message_conn.cursor.execute("select nickname from wechat_contact where username = '%s'" % chatroom)
+            print(message_conn.cursor.fetchone()[0], "*****已删除")
+    message_conn.closeMysql()
+
+
 if __name__ == '__main__':
+    # 开启并行分词
+    jieba.enable_parallel(4)
     main()
+    # clear_wechat_message()
+    # get_stopwords()

@@ -6,6 +6,7 @@
 import re
 from commonTools import wechatContent, ConnectDatabase as cd
 import time
+import os
 
 
 def main():
@@ -63,8 +64,14 @@ def wechat0327():
     message_conn.closeMysql()
 
 
+def getAbsMenu():
+    print(os.getcwd())
+    print(os.path.abspath(os.path.dirname(os.getcwd())))
+
+
 if __name__ == '__main__':
     # main()
     # re_many()
     # wechatClass()
-    wechat0327()
+    # wechat0327()
+    getAbsMenu()
