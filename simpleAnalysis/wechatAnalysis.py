@@ -6,7 +6,6 @@
 4. 统计每个群中，被@的次数
 5. 统计四个群中被@的次数，同5
 6. 分词，并从腾讯词库中提取词向量。
-TODO: 存在一个BUG，就是在多线程开启，建立多个数据库连接时，关闭全部数据库连接会报错，只有少关闭一个message_conn才能避免错误，目前错误原因未知。
 """
 from commonTools import wechatContent, ConnectDatabase as cd
 import threading
@@ -89,7 +88,7 @@ def split_content(sender_conn, talker_content):
 
 def cut_word(word_conn, message_info):
 
-    # 加载停用词辞典(这里为了不影响语意，暂时不删除停用词)
+    # 加载停用词辞典(这里为了不影响语意，暂时不删除停用词和标点)
     # stopwords = get_stopwords()
     msgId = message_info[0]
     msgType = message_info[1]
@@ -122,7 +121,6 @@ def multi_run(coreNum, targetTable, targetFunction):
     :param coreNum: 线程数
     :return:
     """
-
     # 与message表建立数据库连接
     message_conn = cd.MySQLCommand()
     message_conn.connectMysql(table="wechat_message")
@@ -130,28 +128,29 @@ def multi_run(coreNum, targetTable, targetFunction):
 
     conn_dict = {}
     for j in range(coreNum):
-        message_conn = cd.MySQLCommand()
-        message_conn.connectMysql(table=targetTable)
+        multi_conn = cd.MySQLCommand()
+        multi_conn.connectMysql(table=targetTable)
         conn_dict["conn_%s" % str(j)] = message_conn
 
     # 设计一个钩子
     TAG = True
     while TAG:
         # 多线程解析content
-        for sender_conn in conn_dict.values():
+        for multi_conn in conn_dict.values():
             message = message_cursor.fetchone()
             # 如果已经遍历结束，直接结束
             if message is None:
                 # message_conn.closeMysql()
                 TAG = False
                 break
-            th = threading.Thread(target=targetFunction, args=(sender_conn, message, ))
+            th = threading.Thread(target=targetFunction, args=(multi_conn, message, ))
             # print("第", i, "个线程开启")
             th.start()
             th.join()
     # 关闭连接
     for conn_j in conn_dict.values():
         conn_j.closeMysql()
+    message_conn.closeMysql()
 
 
 def count_sender_by_chatroom(coreNum):
@@ -172,11 +171,20 @@ def cut_word_jieba(coreNum):
     multi_run(coreNum, "wechat_word", cut_word)
 
 
+def get_word_vector():
+    # 根据腾讯词库获取词向量
+    pass
+
+
 def main():
     startTime = time.time()
     coreNum = int(input("线程数量："))
+    # 进行简单的统计分析
     # count_sender_by_chatroom(int(coreNum))
+    # 分词
     cut_word_jieba(coreNum)
+    # 提取词向量
+    get_word_vector()
     endTime = time.time()
     print('运行时间：%.3f' % (endTime - startTime))
 
@@ -204,6 +212,8 @@ def clear_wechat_message():
 if __name__ == '__main__':
     # 开启并行分词
     jieba.enable_parallel(4)
-    main()
+
+    # 清理数据库信息
     # clear_wechat_message()
     # get_stopwords()
+    main()

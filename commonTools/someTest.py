@@ -10,7 +10,6 @@ import os
 
 
 def main():
-
     fi = open('data/split_result.txt', 'a', encoding='utf-8')
 
     with open('data/contents.txt', 'r') as f:
@@ -42,7 +41,6 @@ def wechatClass():
 
 
 def wechat0327():
-
     message_conn = cd.MySQLCommand()
     message_conn.connectMysql(table="wechat_message")
 
@@ -51,7 +49,6 @@ def wechat0327():
 
     chatroomNums = message_conn.select_distinct()
     with open("firstTime.txt", "a", encoding="utf-8") as f:
-
         for chatroomNum in chatroomNums:
             title_list = ["createTime"]
             situation = "WHERE talker = '%s'" % chatroomNum
