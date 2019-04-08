@@ -67,8 +67,9 @@ def getAbsMenu():
 
 
 if __name__ == '__main__':
-    # main()
+    main()
     # re_many()
     # wechatClass()
     # wechat0327()
-    getAbsMenu()
+    # getAbsMenu()
+    # lengthOfLongestSubstring()

@@ -54,7 +54,7 @@ class MySQLCommand(object):
             # print(sqlExit)
             res = self.cursor.execute(sqlExit)
             if res:
-                print('数据已经存入数据库', res)
+                # print('数据已经存入数据库', res)
                 return 0
         # 数据不存在，则执行插入操作
         try:

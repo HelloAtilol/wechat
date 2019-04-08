@@ -12,6 +12,7 @@ import threading
 import time
 import os
 import jieba
+import pymysql
 
 
 def get_stopwords():
@@ -130,7 +131,7 @@ def multi_run(coreNum, targetTable, targetFunction):
     for j in range(coreNum):
         multi_conn = cd.MySQLCommand()
         multi_conn.connectMysql(table=targetTable)
-        conn_dict["conn_%s" % str(j)] = message_conn
+        conn_dict["conn_%s" % str(j)] = multi_conn
 
     # 设计一个钩子
     TAG = True
@@ -171,9 +172,70 @@ def cut_word_jieba(coreNum):
     multi_run(coreNum, "wechat_word", cut_word)
 
 
-def get_word_vector():
+def get_word_vector(vector_conn, new_conn, words, ignore_word):
+
     # 根据腾讯词库获取词向量
-    pass
+    # 因为词库的词量较为丰富，暂时忽略停用词，遇到没有的词汇，保存成txt，或者考虑自己训练。
+
+    word_list = str(words).replace("\n", "").split("/")
+    for word in word_list:
+        situation = "where word = '%s'" % word
+        try:
+            vector_cursor = vector_conn.select_order(["*"], situation)
+        except pymysql.err.ProgrammingError:
+            continue
+        word_vector = vector_cursor.fetchone()
+        if word_vector is None:
+            ignore_word.add(word)
+        else:
+            vec = str(word_vector[1:]).replace("(", "").replace(")", "")
+            word_data = {"word": word, "vector": vec}
+
+            new_conn.insertData(word_data, primary_key="word")
+            # print("%s 已导入成功！" % word)
+
+
+def speed_word_vector(coreNum):
+    word_conn = cd.MySQLCommand()
+    word_conn.connectMysql(table="wechat_word")
+    situation = "where msgId > %s" % str(2)
+    word_cursor = word_conn.select_order(["msgId", "jieba_word"], situation=situation)
+    ignore_word = set()
+    conn_dict = {}
+    # 建立数据库连接
+
+    for i in range(coreNum):
+        vector_conn = cd.MySQLCommand()
+        vector_conn.db = "tencent_word_vec"
+        vector_conn.connectMysql(table="tc_word_vec")
+        new_conn = cd.MySQLCommand()
+        new_conn.connectMysql(table="wechat_vector")
+        conn_dict["conn_%s" % str(i)] = (vector_conn, new_conn)
+    TAG = True
+    while TAG:
+        ts = []
+        for conn_tuple in conn_dict.values():
+            try:
+                (msgId, words) = word_cursor.fetchone()
+            except TypeError:
+                TAG = False
+                break
+            # print(words)
+            th = threading.Thread(target=get_word_vector, args=(conn_tuple[0], conn_tuple[1], words, ignore_word,))
+            th.start()
+            print("第%s条信息开始处理！" % str(msgId))
+            ts.append(th)
+        for th in ts:
+            th.join()
+
+    with open("data/ignore_word.txt", "w", encoding="utf-8") as f:
+        for word in ignore_word:
+            f.write(str(word) + "\n")
+
+    for conn_tuple in conn_dict.values():
+        conn_tuple[0].closeMysql()
+        conn_tuple[1].closeMysql()
+    word_conn.closeMysql()
 
 
 def main():
@@ -211,9 +273,11 @@ def clear_wechat_message():
 
 if __name__ == '__main__':
     # 开启并行分词
-    jieba.enable_parallel(4)
+    # jieba.enable_parallel(4)
 
     # 清理数据库信息
     # clear_wechat_message()
     # get_stopwords()
-    main()
+    # main()
+    # get_word_vector()
+    speed_word_vector(32)
