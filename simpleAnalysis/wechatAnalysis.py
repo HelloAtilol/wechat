@@ -242,7 +242,7 @@ def main():
     startTime = time.time()
     coreNum = int(input("线程数量："))
     # 进行简单的统计分析
-    # count_sender_by_chatroom(int(coreNum))
+    count_sender_by_chatroom(int(coreNum))
     # 分词
     cut_word_jieba(coreNum)
     # 提取词向量
@@ -276,8 +276,8 @@ if __name__ == '__main__':
     # jieba.enable_parallel(4)
 
     # 清理数据库信息
-    # clear_wechat_message()
+    clear_wechat_message()
     # get_stopwords()
-    # main()
+    main()
     # get_word_vector()
-    speed_word_vector(32)
+    # speed_word_vector(32)
