@@ -7,7 +7,7 @@ import re
 from commonTools import wechatContent, ConnectDatabase as cd
 import time
 import os
-
+import jieba
 
 def main():
     fi = open('data/split_result.txt', 'a', encoding='utf-8')
@@ -66,10 +66,42 @@ def getAbsMenu():
     print(os.path.abspath(os.path.dirname(os.getcwd())))
 
 
+def getStopWords():
+    contact_conn = cd.MySQLCommand()
+    contact_conn.connectMysql(table="wechat_vector")
+
+    #
+    f = open("data/ignore_word.txt", "a", encoding="utf-8")
+    contact_cursor = contact_conn.cursor
+    sql = "SELECT word FROM wechat_vector WHERE vector = '0'"
+    contact_cursor.execute(sql)
+
+    while True:
+        word = contact_cursor.fetchone()[0]
+        if word is None:
+            break
+        print(word)
+        f.write(word + '\n')
+    f.close()
+    contact_conn.closeMysql()
+
+
+def jiebaCut():
+    jieba.add_word("雨里")
+    # jieba.add_word("多大罪")
+    jieba.add_word("泰道")
+    cut_res = jieba.cut_for_search("受多大罪")
+    print("/".join(cut_res))
+    cut_res = jieba.cut_for_search("不放肉")
+    print("/".join(cut_res))
+
+
 if __name__ == '__main__':
-    main()
+    # main()
     # re_many()
     # wechatClass()
     # wechat0327()
     # getAbsMenu()
     # lengthOfLongestSubstring()
+    # getStopWords()
+    jiebaCut()

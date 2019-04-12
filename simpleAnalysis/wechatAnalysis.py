@@ -186,19 +186,24 @@ def get_word_vector(vector_conn, new_conn, words, ignore_word):
             continue
         word_vector = vector_cursor.fetchone()
         if word_vector is None:
-            ignore_word.add(word)
+            # ignore_word.add(word)
+            word_data = {"word": word, "vector": str(0)}
+
+            new_conn.insertData(word_data, primary_key="word")
+        """
         else:
             vec = str(word_vector[1:]).replace("(", "").replace(")", "")
             word_data = {"word": word, "vector": vec}
 
             new_conn.insertData(word_data, primary_key="word")
             # print("%s 已导入成功！" % word)
+        """
 
 
 def speed_word_vector(coreNum):
     word_conn = cd.MySQLCommand()
     word_conn.connectMysql(table="wechat_word")
-    situation = "where msgId > %s" % str(2)
+    situation = "where msgId > %s" % str(90909)
     word_cursor = word_conn.select_order(["msgId", "jieba_word"], situation=situation)
     ignore_word = set()
     conn_dict = {}
