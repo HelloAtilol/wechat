@@ -15,13 +15,13 @@ class MySQLCommand(object):
     # 初始化类
     def __init__(self):
         # 数据库地址
-        self.host = '192.168.1.107'
+        self.host = '***.***.***.***'
         # 端口号
         self.port = 3306
         # 用户名
         self.user = 'root'
         # 密码
-        self.password = 'sim509'
+        self.password = '******'
         # 数据库名
         self.db = 'wechat_message'
 
